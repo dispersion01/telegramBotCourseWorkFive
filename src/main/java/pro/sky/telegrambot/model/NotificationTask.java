@@ -10,6 +10,8 @@ import java.util.Objects;
 
 @Entity
 public class NotificationTask {
+
+
     public enum NotificationStatus {
         SCHEDULED,
         SENT,
@@ -27,11 +29,8 @@ public class NotificationTask {
     public NotificationTask() {
 
     }
-    public NotificationTask(Long id, LocalDateTime notification_date, String notification_message, Long chatId, LocalDateTime sentDate) {
-        this.id = id;
-        this.notification_date = notification_date;
+    public NotificationTask(String notification_message, LocalDateTime sentDate) {
         this.notification_message = notification_message;
-        this.chatId = chatId;
         this.sentDate = sentDate;
     }
 

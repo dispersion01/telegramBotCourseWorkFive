@@ -2,11 +2,10 @@ package pro.sky.telegrambot.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import javax.management.Notification;
+import pro.sky.telegrambot.model.NotificationTask;
 import java.util.Collection;
 
-public interface NotificationRepository extends JpaRepository<Notification, Long> {
+public interface NotificationRepository extends JpaRepository<NotificationTask, Long> {
     @Query("from NotificationTask where notification_date = current_timestamp")
-    Collection<Notification> getScheduleNotification();
+    Collection<NotificationTask> getScheduleNotification();
 }

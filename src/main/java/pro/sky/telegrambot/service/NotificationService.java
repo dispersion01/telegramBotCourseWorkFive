@@ -1,25 +1,26 @@
 package pro.sky.telegrambot.service;
 
+import com.sun.nio.sctp.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.listener.TelegramBotUpdatesListener;
 import pro.sky.telegrambot.model.NotificationTask;
 import pro.sky.telegrambot.repository.NotificationRepository;
-
-import javax.management.Notification;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+@Service
 public class NotificationService {
     private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-    private static final String REGEX_BOT_MESSAGE = "/^([A-Z]{2}[0-9]{6})?$|[0-9]{8}[\\s\\-]?[0-9]{5}?$/";
+    private static final String REGEX_BOT_MESSAGE = "\"([0-9\\\\.\\\\:\\\\s]{16})(\\\\s)([\\\\W+]+)\";";
     private final NotificationRepository repository;
 
     public NotificationService(NotificationRepository repository) {
@@ -42,9 +43,9 @@ public class NotificationService {
                 String notification = matcher.group(3);
                 result = new NotificationTask(notification, notificationDateTime);
             }
-        } catch (Exception e) {
-            logger.error("Fail time: " + notificationBotMessage + "with pattern" +  DATE_TIME_FORMATTER+e);
-        } catch (DateTimeException e) {
+        } /*catch (Exception e) {
+            logger.error("Fail time: " + notificationBotMessage + "with pattern" +  DATE_TIME_FORMATTER+e);*/
+         catch (DateTimeParseException e) {
             logger.error("Fail notification: " + notificationBotMessage, e);
         }
         return Optional.ofNullable(result);
@@ -52,11 +53,15 @@ public class NotificationService {
 
     public void notifyAllScheduledTask(Consumer<NotificationTask> notifier) {
         logger.info("Send notification");
-        Collection<Notification> notifications = repository.getScheduleNotification();
-        notifications.forEach(task -> {
+        Collection<NotificationTask> notifications = repository.getScheduleNotification();
+        for (NotificationTask task : notifications) {
+            notifier.accept(task);
+            task.markAsSent();
+        }
+        /*notifications.forEach(task -> {
             notifier.accept(task);
             task.markAsSent(notifications);
-        });
+        });*/
         repository.saveAll(notifications);
 
     }
