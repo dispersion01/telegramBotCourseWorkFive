@@ -6,6 +6,7 @@ import pro.sky.telegrambot.model.NotificationTask;
 import java.util.Collection;
 
 public interface NotificationRepository extends JpaRepository<NotificationTask, Long> {
-    @Query("from NotificationTask where notification_date = current_timestamp")
+    @Query(value= "select * from notification where notification_date = current_timestamp",
+            nativeQuery = true)
     Collection<NotificationTask> getScheduleNotification();
 }

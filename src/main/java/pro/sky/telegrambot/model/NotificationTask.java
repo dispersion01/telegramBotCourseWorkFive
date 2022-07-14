@@ -1,8 +1,6 @@
 package pro.sky.telegrambot.model;
 
-import org.springframework.data.annotation.Id;
-import pro.sky.telegrambot.repository.NotificationRepository;
-import pro.sky.telegrambot.service.NotificationService;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

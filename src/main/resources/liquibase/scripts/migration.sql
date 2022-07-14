@@ -7,4 +7,5 @@ CREATE TABLE notification_task (
                        notification_message text,
                        status varchar,
                        sent_date timestamp
-)
+);
+alter table notification_task owner to userTelegramBot;

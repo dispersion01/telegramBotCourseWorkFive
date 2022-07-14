@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 public class NotificationService {
     private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-    private static final String REGEX_BOT_MESSAGE = "\"([0-9\\\\.\\\\:\\\\s]{16})(\\\\s)([\\\\W+]+)\";";
+    private static final String REGEX_BOT_MESSAGE = "([0-9\\\\.\\\\:\\\\s]{16})(\\\\s)([\\\\W+]+)";
     private final NotificationRepository repository;
 
     public NotificationService(NotificationRepository repository) {
